@@ -136,54 +136,54 @@ access to our component via the `this` keyword**.
 In order to keep access to `this` inside of our event handler, we have three
 options:
 
-1. Use an arrow function for the event handler:
+1. Use an arrow function to **define** the event handler:
 
-```js
-handleClick() {
-  console.log(this.props); // => { message: "hi" }
-}
+   ```js
+   handleClick = () => {
+     console.log(this.props); // => { message: "hi" }
+   }
 
-render() {
-  <button onClick={() => this.handleClick()}>One</button>
-}
-```
+   render() {
+     <button onClick={this.handleClick}>One</button>
+   }
+   ```
 
-Using an arrow function here works because we are invoking the `handleClick` method **on** the `this` object, and **arrow functions don't create their own context**.
+   This is the approach you'll see most commonly!
 
-2. Use an arrow function to **define** the event handler:
+2. Use an arrow function for the event handler:
 
-```js
-handleClick = () => {
-  console.log(this.props); // => { message: "hi" }
-}
+   ```js
+   handleClick() {
+     console.log(this.props); // => { message: "hi" }
+   }
 
-render() {
-  <button onClick={this.handleClick}>One</button>
-}
-```
+   render() {
+     <button onClick={() => this.handleClick()}>One</button>
+   }
+   ```
 
-This is the approach you'll see most commonly!
+   Using an arrow function here works because we are invoking the `handleClick` method **on** the `this` object, and **arrow functions don't create their own context**.
 
 3. Bind the event handler explicitly:
 
-```js
-class Clicker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClick.bind(this);
-  }
+   ```js
+   class Clicker extends React.Component {
+     constructor(props) {
+       super(props);
+       this.handleClick.bind(this);
+     }
 
-  handleClick(event) {
-    console.log(this.props); // => undefined
-  }
+     handleClick(event) {
+       console.log(this.props); // => undefined
+     }
 
-  render() {
-    return <button onClick={this.handleClick}>One</button>;
-  }
-}
-```
+     render() {
+       return <button onClick={this.handleClick}>One</button>;
+     }
+   }
+   ```
 
-You'll see this approach more often in older code bases.
+   You'll see this approach more often in older code bases.
 
 ## Summary
 
