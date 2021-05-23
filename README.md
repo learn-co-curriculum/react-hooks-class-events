@@ -130,10 +130,11 @@ class Clicker extends React.Component {
 ReactDOM.render(<Clicker message="hi" />, document.querySelector("#root"));
 ```
 
-Due to some of the  
-[complex rules of the `this` keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this),
-**when we use a class method as a callback function, we will no longer have
-access to our component via the `this` keyword**.
+Due to some of the [complex rules of the `this` keyword][this], when we use a
+class method as a callback function, **we will no longer have access to our
+component instance via the `this` keyword**.
+
+[this]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
 
 In order to keep access to `this` inside of our event handler, we have three
 options:
