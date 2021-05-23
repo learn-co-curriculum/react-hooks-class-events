@@ -1,22 +1,22 @@
 # Class Methods and Event Handling
 
-## Overview
+## Learning Goals
+
+1. Write a helper method in a React class
+2. Use a method as a callback function with the arrow function syntax
+
+## Introduction
 
 Working with classes means getting used to a slightly different syntax for
 organizing our component code. We'll talk about how to define **methods** on our
 classes, and how to make sure that our callback functions are defined so that we
 can access the component data via the `this` keyword in those methods.
 
-## Objectives
-
-1. Write a helper method in a React class
-2. Use a method as a callback function with the arrow function syntax
-
 ## Defining Methods
 
-In a typical function component, we can create helper methods within the
-component so that those methods have access to data that is in the scope of our
-component. For example:
+In a typical function component, we can create helper functions _within_ the
+component so that those functions have access to data that is in the scope of
+our component. For example:
 
 ```js
 function TodoList(props) {
@@ -29,14 +29,15 @@ function TodoList(props) {
 ```
 
 Since this `displayTodos` function is defined **within** the `TodoList`
-component, it has access to all the same data in the component via its outer
-scope.
+component, it has access to all the data in the component (including props) via
+its outer scope.
 
 With a class component, we can define **methods** that will give us similar
 functionality:
 
 ```js
 class TodoList extends React.Component {
+  // NOTE: no function keyword before the method name!
   displayTodos() {
     return this.props.todos.map((todo) => <li key={todo.id}>{todo.text}</li>);
   }
@@ -68,12 +69,13 @@ render() {
 }
 ```
 
-However, it's not a common practice to define functions (like `displayTodos`
-here) _within_ methods.
+However, it's a common practice to define functions (like `displayTodos` here)
+as their own standalone methods.
 
 ## Classes With Event Handlers
 
-When writing class components, it's a common practice to define an event handler as a method within the class. Consider this example:
+When writing class components, it's a common practice to define an event handler
+as a method within the class. Consider this example:
 
 ```js
 class Clicker extends React.Component {
@@ -136,56 +138,58 @@ access to our component via the `this` keyword**.
 In order to keep access to `this` inside of our event handler, we have three
 options:
 
-1. Use an arrow function to **define** the event handler:
+- Use an arrow function to **define** the event handler method:
 
-   ```js
-   handleClick = () => {
-     console.log(this.props); // => { message: "hi" }
-   }
+  ```js
+  handleClick = () => {
+    console.log(this.props); // => { message: "hi" }
+  }
 
-   render() {
-     <button onClick={this.handleClick}>One</button>
-   }
-   ```
+  render() {
+    <button onClick={this.handleClick}>One</button>
+  }
+  ```
 
-   This is the approach you'll see most commonly!
+  This is the approach you'll see most commonly!
 
-2. Use an arrow function for the event handler:
+- Use an arrow function to invoke the event handler method:
 
-   ```js
-   handleClick() {
-     console.log(this.props); // => { message: "hi" }
-   }
+  ```js
+  handleClick() {
+    console.log(this.props); // => { message: "hi" }
+  }
 
-   render() {
-     <button onClick={() => this.handleClick()}>One</button>
-   }
-   ```
+  render() {
+    <button onClick={() => this.handleClick()}>One</button>
+  }
+  ```
 
-   Using an arrow function here works because we are invoking the `handleClick` method **on** the `this` object, and **arrow functions don't create their own context**.
+  Using an arrow function here works because we are invoking the `handleClick`
+  method **on** the `this` object, and **arrow functions don't create their own
+  context**.
 
-3. Bind the event handler explicitly:
+- Bind the event handler explicitly:
 
-   ```js
-   class Clicker extends React.Component {
-     constructor(props) {
-       super(props);
-       this.handleClick.bind(this);
-     }
+  ```js
+  class Clicker extends React.Component {
+    constructor(props) {
+      super(props);
+      this.handleClick.bind(this);
+    }
 
-     handleClick(event) {
-       console.log(this.props); // => undefined
-     }
+    handleClick(event) {
+      console.log(this.props); // => undefined
+    }
 
-     render() {
-       return <button onClick={this.handleClick}>One</button>;
-     }
-   }
-   ```
+    render() {
+      return <button onClick={this.handleClick}>One</button>;
+    }
+  }
+  ```
 
-   You'll see this approach more often in older code bases.
+  You'll see this last approach more often in older code bases.
 
-## Summary
+## Conclusion
 
 To add functionality to our components, we can define additional methods within
 the class. Within those methods, we can access shared data via the `this`
@@ -193,10 +197,11 @@ keyword.
 
 When defining methods that are meant to be used as _callbacks_, you must use an
 arrow function or explicitly bind `this` to ensure your callback methods have
-access to the correct context.
+access to the correct context via the `this` keyword.
 
 You can also define _all_ of your component's methods using arrow functions, if
-remembering all of these rules feels like too much!
+remembering all of these rules feels like too much! This is theoretically less
+performant, but it's unlikely you or your users will notice a difference.
 
 ## Resources
 
