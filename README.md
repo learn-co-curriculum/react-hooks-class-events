@@ -18,7 +18,7 @@ In a typical function component, we can create helper functions _within_ the
 component so that those functions have access to data that is in the scope of
 our component. For example:
 
-```js
+```jsx
 function TodoList(props) {
   function displayTodos() {
     return props.todos.map((todo) => <li key={todo.id}>{todo.text}</li>);
@@ -35,7 +35,7 @@ its outer scope.
 With a class component, we can define **methods** that will give us similar
 functionality:
 
-```js
+```jsx
 class TodoList extends React.Component {
   // NOTE: no function keyword before the method name!
   displayTodos() {
@@ -59,7 +59,7 @@ as calling `this.props` in the `displayTodos` method.
 
 We could also have written the same functionality all inside the `render` method:
 
-```js
+```jsx
 render() {
   function displayTodos() {
     return this.props.todos.map((todo) => <li key={todo.id}>{todo.text}</li>);
@@ -77,7 +77,7 @@ as their own standalone methods.
 When writing class components, it's a common practice to define an event handler
 as a method within the class. Consider this example:
 
-```js
+```jsx
 class Clicker extends React.Component {
   handleClick(event) {
     console.log(`${event.target.name} was clicked`);
@@ -105,7 +105,7 @@ function, and we'll see the name of the button being logged.
 **However**, if we need to access the value of `this` inside of `handleClick`,
 we'll see something unexpected:
 
-```js
+```jsx
 class Clicker extends React.Component {
   handleClick(event) {
     console.log(this.props); // => undefined
@@ -141,7 +141,7 @@ options:
 
 - Use an arrow function to **define** the event handler method:
 
-  ```js
+  ```jsx
   handleClick = () => {
     console.log(this.props); // => { message: "hi" }
   }
@@ -155,7 +155,7 @@ options:
 
 - Use an arrow function to invoke the event handler method:
 
-  ```js
+  ```jsx
   handleClick() {
     console.log(this.props); // => { message: "hi" }
   }
@@ -171,7 +171,7 @@ options:
 
 - Bind the event handler explicitly:
 
-  ```js
+  ```jsx
   class Clicker extends React.Component {
     constructor(props) {
       super(props);
