@@ -185,7 +185,7 @@ class Clicker extends React.Component {
   }
 
   handleClick(event) {
-    console.log(this.props); // => undefined
+    console.log(this.props); // => { message: "hi" }
   }
 
   render() {
