@@ -57,7 +57,8 @@ data through _context_: both have the access to the same `this` object. So
 calling `this.props` in the `render` method will give us access to the same data
 as calling `this.props` in the `displayTodos` method.
 
-We could also have written the same functionality all inside the `render` method:
+We could also have written the same functionality all inside the `render`
+method:
 
 ```jsx
 render() {
@@ -108,7 +109,7 @@ we'll see something unexpected:
 ```jsx
 class Clicker extends React.Component {
   handleClick(event) {
-    console.log(this.props); // => undefined
+    console.log(this); // => undefined
   }
 
   render() {
@@ -134,61 +135,66 @@ Due to some of the [complex rules of the `this` keyword][this], when we use a
 class method as a callback function, **we will no longer have access to our
 component instance via the `this` keyword**.
 
-[this]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
+[this]:
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this
 
-In order to keep access to `this` inside of our event handler, we have three
+In order to keep access to `this` inside of our event handler, we have several
 options:
 
-- Use an arrow function to **define** the event handler method:
+**1.** Use an arrow function to **define** the event handler method:
 
-  ```jsx
+```jsx
+class Clicker extends React.Component {
   handleClick = () => {
     console.log(this.props); // => { message: "hi" }
-  }
+  };
 
   render() {
-    <button onClick={this.handleClick}>One</button>
+    return <button onClick={this.handleClick}>One</button>;
   }
-  ```
+}
+```
 
-  This is the approach you'll see most commonly!
+This is the approach you'll see most commonly!
 
-- Use an arrow function to invoke the event handler method:
+**2.** Use an arrow function to invoke the event handler method:
 
-  ```jsx
+```jsx
+class Clicker extends React.Component {
   handleClick() {
     console.log(this.props); // => { message: "hi" }
   }
 
   render() {
-    <button onClick={() => this.handleClick()}>One</button>
+    return <button onClick={() => this.handleClick()}>One</button>;
   }
-  ```
+}
+```
 
-  Using an arrow function here works because we are invoking the `handleClick`
-  method **on** the `this` object, and **arrow functions don't create their own
-  context**.
+Using an arrow function here works because we are invoking the `handleClick`
+method **on** the `this` object, and **arrow functions don't create their own
+context**.
 
-- Bind the event handler explicitly:
+**3** Bind the event handler explicitly:
 
-  ```jsx
-  class Clicker extends React.Component {
-    constructor(props) {
-      super(props);
-      this.handleClick.bind(this);
-    }
-
-    handleClick(event) {
-      console.log(this.props); // => undefined
-    }
-
-    render() {
-      return <button onClick={this.handleClick}>One</button>;
-    }
+```jsx
+class Clicker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
-  ```
 
-  You'll see this last approach more often in older code bases.
+  handleClick(event) {
+    console.log(this.props); // => undefined
+  }
+
+  render() {
+    return <button onClick={this.handleClick}>One</button>;
+  }
+}
+```
+
+You'll see this last approach more often in older code bases.
 
 ## Conclusion
 
@@ -207,3 +213,4 @@ performant, but it's unlikely you or your users will notice a difference.
 ## Resources
 
 - [React Handling Events](https://reactjs.org/docs/handling-events.html)
+- [How do I bind a function to a component instance?](https://reactjs.org/docs/faq-functions.html#how-do-i-bind-a-function-to-a-component-instance)
