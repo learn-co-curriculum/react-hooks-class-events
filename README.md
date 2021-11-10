@@ -175,7 +175,7 @@ Using an arrow function here works because we are invoking the `handleClick`
 method **on** the `this` object, and **arrow functions don't create their own
 context**.
 
-**3** Bind the event handler explicitly:
+**3.** Bind the event handler explicitly:
 
 ```jsx
 class Clicker extends React.Component {
